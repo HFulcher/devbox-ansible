@@ -1,0 +1,41 @@
+---
+- name: ensure fonts directory
+  file:
+    path: "/home/{{ username }}/.fonts"
+    state: directory
+
+- name: Download FiraFont
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraCode.zip
+    dest: "/home/{{ username }}/.fonts/"
+    remote_src: yes
+
+- name: Install needed packages
+  apt:
+    name:
+      - ninja-build
+      - gettext
+      - cmake
+      - curl
+      - nodejs
+      - npm
+      - ripgrep
+
+- name: Install neovim
+  ansible.builtin.shell: |
+    git clone https://github.com/neovim/neovim 
+    cd neovim && git checkout stable && make CMAKE_BUILD_TYPE=RelWithDebInfo
+    make install
+  args:
+    chdir: "/home/{{ username }}/"
+    executable: /bin/bash
+
+- name: Install Treesitter cli
+  community.general.npm:
+    name: tree-sitter-cli
+    global: true
+
+- name: Download AstroNvim
+  ansible.builtin.git:
+    repo: 'https://github.com/AstroNvim/AstroNvim'
+    dest: "/home/{{ username }}/.config/nvim"

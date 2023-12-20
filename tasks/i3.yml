@@ -1,0 +1,14 @@
+---
+- name: Copy i3 config to machine
+  ansible.builtin.copy:
+    src: ./resources/i3.config 
+    dest: "/home/{{ username }}/.config/i3/config"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Copy wallpaper to machine
+  ansible.builtin.copy:
+    src: ./resources/wallpaper.jpg
+    dest: "/home/{{ username }}/.config/i3/wallpaper.jpg"
+    owner: "{{ username }}"
+    group: "{{ username }}"

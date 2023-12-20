@@ -1,0 +1,37 @@
+---
+- name: Update SSH configuration to be more secure
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication no"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin no"
+    - regexp: "^UseDNS"
+      line: "UseDNS no"
+    - regexp: "^PermitEmptyPasswords"
+      line: "PermitEmptyPasswords no"
+    - regexp: "^ChallengeResponseAuthentication"
+      line: "ChallengeResponseAuthentication no"
+    - regexp: "^GSSAPIAuthentication"
+      line: "GSSAPIAuthentication no"
+    - regexp: "^X11Forwarding"
+      line: "X11Forwarding no"
+  register: sshd_config
+
+- name: Add macbook public key 
+  authorized_key:
+    user: huw
+    state: present 
+    key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqQVXe4mquzJwgdCtCJNje9CyNU6ED8vNfoh1Jf8tPeEYp3d4BadmlTiJMZ5XPhZhm1W1mLcotQC8uCBjuf8mCZtRMaX8cIhh/XLPfT0j5KRyj3GeEIHqGrrO5GYKcOvi2pBgyAv3i1sMnV1ljXyQnIMxUFjZkfDk1mh1eOmBOXJs0ul43z54C8U/v4ffsFrTVTIR86Eer7jA7kuu0taq0KeF0vzZYNLfebPOBmimq4XDIn+FxCu5vSmxaVXZ/L5hdensEMIblbhIuORpFyrl/rP+TKOR8ejlmuxpFW3Im6CvBu3yHx/bQIWfxbVrmca/gpGj7SvLhTDgLYV8gHZxMQE1VefuW+bhokInCN/uOOS34b2ok67hlEM1olKy2Oa+CmruV2pEY+7D3JiCBMe1999nZ+pyWvkmdO4Wp7pXmy9dzoURyq8Urdac+B+DVvLvKKd2R0OsbNfcMdOhuB+pKJqMdTB2E9mOlVooPQ/SYbVQY5HvumfHLpikQhqvarxk= huwfulcher@Huws-MacBook-Air.local"
+
+- name: Restart SSH daemon
+  service:
+    name: sshd 
+    state: restarted 
+  when: sshd_config.changed

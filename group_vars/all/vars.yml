@@ -1,0 +1,23 @@
+username: huw
+password: changeme
+packages:
+  - firefox-esr
+  - unzip
+  - vim
+  - htop
+  - neofetch
+  - tmux
+  - python3
+  - pipewire-pulse
+  - i3
+  - xorg
+  - lightdm
+  - slick-greeter
+  - lightdm-settings
+  - lxappearance
+  - feh
+  - kitty
+  - rofi
+  - bumblebee-status
+  - clipit
+

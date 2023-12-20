@@ -1,0 +1,12 @@
+---
+- name: Install programming packages
+  apt:
+    name:
+      - python3
+
+- name: Install rust
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    chdir: "/home/{{ username }}/"
+    executable: /bin/bash
+
