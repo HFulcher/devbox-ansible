@@ -9,6 +9,7 @@ packages:
   - tmux
   - python3
   - pipewire-pulse
+  - pactl
   - i3
   - xorg
   - lightdm
